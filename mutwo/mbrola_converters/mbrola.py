@@ -13,15 +13,24 @@ from mutwo import core_events
 from mutwo import music_converters
 from mutwo import music_parameters
 
-__all__ = ("EventToPhonemeList", "SimpleEventToPitch", "SimpleEventToPhonemeString")
+__all__ = (
+    "EventToPhonemeList",
+    "EventToSpeakSynthesis",
+    "SimpleEventToPitch",
+    "SimpleEventToPhonemeString",
+)
 
 
 class SimpleEventToPhonemeString(core_converters.SimpleEventToAttribute):
+    """Convert a simple event to a phoneme string."""
+
     def __init__(self, attribute_name: str = "phoneme", exception_value: str = "_"):
         super().__init__(attribute_name, exception_value)
 
 
 class SimpleEventToPitch(music_converters.SimpleEventToPitchList):
+    """Convert a simple event to a pitch."""
+
     def convert(self, *args, **kwargs) -> typing.Optional[music_parameters.abc.Pitch]:
         pitch_list = super().convert(*args, **kwargs)
         n_pitches = len(pitch_list)
@@ -79,7 +88,13 @@ class EventToPhonemeList(core_converters.abc.EventConverter):
             for (pitch, time,) in zip(
                 pitch_envelope.parameter_tuple, pitch_envelope.absolute_time_tuple
             ):
-                pitch_modification_list.append((int(time), int(pitch.frequency)))
+                pitch_modification_list.append(
+                    (int(time), int(pitch.frequency))  # type: ignore
+                )
+            # We have to add a second value to ensure the pitch keeps
+            # constant.
+            if len(pitch_modification_list) == 1:
+                pitch_modification_list.append((100, pitch_modification_list[0][-1]))
         return pitch_modification_list
 
     def _convert_simple_event(
@@ -99,3 +114,35 @@ class EventToPhonemeList(core_converters.abc.EventConverter):
     def convert(self, event_to_convert: core_events.abc.Event) -> voxpopuli.PhonemeList:
         converted_event = self._convert_event(event_to_convert, 0)
         return voxpopuli.PhonemeList(converted_event)
+
+
+class EventToSpeakSynthesis(core_converters.abc.Converter):
+    """Render event to soundfile with speak synthesis engine mbrola.
+
+    :param voice: The voice object which is responsible in rendering the
+        soundfile.
+    :type voice: voxpopuli.Voice
+    :param event_to_phoneme_list: A converter or function which transforms
+        an event to a :class:`voxpopuli.PhonemeList`. By default this is a
+        :class:`mutwo.mbrola_converters.EventToPhonemeList` object..
+    :type event_to_phoneme_list: typing.Callable[[core_events.abc.Event], voxpopuli.PhonemeList]
+
+    **Warning:**
+
+    You need to install the non-python dependencies for `voxpopuli`, otherwise
+    the converter won't work.
+    """
+
+    def __init__(
+        self,
+        voice: voxpopuli.Voice = voxpopuli.Voice(),
+        event_to_phoneme_list: typing.Callable[
+            [core_events.abc.Event], voxpopuli.PhonemeList
+        ] = EventToPhonemeList(),
+    ):
+        self._event_to_phoneme_list = event_to_phoneme_list
+        self._voice = voice
+
+    def convert(self, event_to_convert: core_events.abc.Event, sound_file_name: str):
+        phoneme_list = self._event_to_phoneme_list(event_to_convert)
+        self._voice.to_audio(phoneme_list, sound_file_name)

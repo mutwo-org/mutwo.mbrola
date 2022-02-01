@@ -13,6 +13,9 @@ jobs:
       - run:
           name: Run tests
           command: |
+            sudo apt install mbrola espeak
+            sudo apt install mbrola-*
+            sudo apt install sox
             pip3 install virtualenv
             TEST_VIRTUALENV_DIR=mutwo_test
             mkdir $TEST_VIRTUALENV_DIR

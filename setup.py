@@ -4,11 +4,19 @@ import setuptools  # type: ignore
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-extras_require = {"testing": ["nose", "coveralls"]}
+extras_require = {
+    "testing": [
+        "nose",
+        "coveralls",
+        "sox==1.4.1",
+        "tensorflow>=2.0.0",
+        "crepe==0.0.12",
+    ]
+}
 
 setuptools.setup(
     name="mutwo.ext-mbrola",
-    version="0.1.0",
+    version="0.2.0",
     license="GPL",
     description="mbrola extension for event based framework for generative art",
     long_description=long_description,
