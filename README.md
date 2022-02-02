@@ -14,3 +14,9 @@ mutwo.ext-mbrola is available on [pypi](https://pypi.org/project/mutwo.ext-mbrol
 ```sh
 pip3 install mutwo.ext-mbrola
 ```
+
+### Limitations
+
+Mbrola has problems with long durations of single phonemes (longer than around 8 seconds).
+Sometimes it will just produce empty sound files in this case.
+It is not clear yet what's the border, maybe in the mbrola documentation one can find more about this.
