@@ -170,20 +170,34 @@ class EventToSpeakSynthesisTest(unittest.TestCase):
         self.converter.convert(test_event, self.test_file_name)
 
         sampling_rate, audio = wavfile.read(self.test_file_name)
-        _, frequency_array, _, _ = crepe.predict(audio, sampling_rate)
 
-        frequency = float(np.median(frequency_array))
-        # We have a 24 cents tolerance
+        _, frequency_array, confidence_array, _ = crepe.predict(audio, sampling_rate)
+
+        filtered_frequency_array = tuple(
+            frequency
+            for frequency, confidence in zip(frequency_array, confidence_array)
+            if confidence > 0.8
+        )
+
+        frequency = float(np.median(filtered_frequency_array))
+        # We have a 16 cents tolerance
         #   - the prediction is not 100% precise
         #   - there are fluctuations in the signal which don't affect the
         #     main audible frequency but the resulting analysis data
+        print(
+            abs(
+                music_parameters.abc.Pitch.hertz_to_cents(
+                    frequency, test_event.pitch_list[0].frequency
+                )
+            )
+        )
         self.assertTrue(
             abs(
                 music_parameters.abc.Pitch.hertz_to_cents(
                     frequency, test_event.pitch_list[0].frequency
                 )
             )
-            < 24
+            < 16
         )
 
         self._clean_up()
