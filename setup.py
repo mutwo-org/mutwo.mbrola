@@ -32,8 +32,8 @@ setuptools.setup(
     ],
     setup_requires=[],
     install_requires=[
-        "mutwo.ext-core>=0.55.0, <1.00.0",
-        "mutwo.ext-music>=0.7.0, <1.0.0",
+        "mutwo.core>=0.61.4, <1.00.0",
+        "mutwo.music>=0.17.0, <1.0.0",
         "voxpopuli>=0.3.7, <1",
     ],
     extras_require=extras_require,

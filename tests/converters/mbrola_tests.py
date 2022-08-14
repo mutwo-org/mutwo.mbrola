@@ -156,7 +156,7 @@ class EventToSpeakSynthesisTest(unittest.TestCase):
         # range.
         self.assertAlmostEqual(
             sox.file_info.duration(self.test_file_name),  # type: ignore
-            sequential_event.duration,  # type: ignore
+            sequential_event.duration.duration_in_floats,  # type: ignore
             places=2,
         )
 

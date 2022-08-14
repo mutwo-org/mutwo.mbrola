@@ -63,7 +63,8 @@ class EventToPhonemeList(core_converters.abc.EventConverter):
 
     This converter assumes that the duration attribute of the input
     event is in seconds. It multiplies the input duration by a factor
-    of 1000 and parses it to the `voxpopuli.Phoneme` object which expects duration in milliseconds. It is the responsibility of the user
+    of 1000 and parses it to the `voxpopuli.Phoneme` object which expects duration
+    in milliseconds. It is the responsibility of the user
     to ensure that the duration has the right format.
     """
 
@@ -107,7 +108,7 @@ class EventToPhonemeList(core_converters.abc.EventConverter):
         pitch_modification_list = self._pitch_to_pitch_modification_list(pitch)
         # From seconds to milliseconds (the converter assumes
         # that the input duration is in seconds!)
-        duration = int(simple_event_to_convert.duration * 1000)
+        duration = int(simple_event_to_convert.duration.duration_in_floats * 1000)
         phoneme = voxpopuli.Phoneme(phoneme_string, duration, pitch_modification_list)
         return (phoneme,)
 
