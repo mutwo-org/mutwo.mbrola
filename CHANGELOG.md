@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2022-08-14
+
+### Changed
+- package name from `mutwo.ext-mbrola` to `mutwo.mbrola`
+
+
 ## [0.2.0] - 2022-02-01
 
 ### Added
