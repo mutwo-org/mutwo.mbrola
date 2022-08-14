@@ -1,5 +1,11 @@
 import setuptools  # type: ignore
 
+version = {}
+with open("mutwo/mbrola_version/__init__.py") as fp:
+    exec(fp.read(), version)
+
+VERSION = version["__version__"]
+
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -16,7 +22,7 @@ extras_require = {
 
 setuptools.setup(
     name="mutwo.mbrola",
-    version="0.2.0",
+    version=VERSION,
     license="GPL",
     description="mbrola extension for event based framework for generative art",
     long_description=long_description,
