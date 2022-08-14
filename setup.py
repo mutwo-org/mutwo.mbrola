@@ -15,7 +15,7 @@ extras_require = {
 }
 
 setuptools.setup(
-    name="mutwo.ext-mbrola",
+    name="mutwo.mbrola",
     version="0.2.0",
     license="GPL",
     description="mbrola extension for event based framework for generative art",
@@ -23,7 +23,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     author="Levin Eric Zimmermann",
     author_email="levin.eric.zimmermann@posteo.eu",
-    url="https://github.com/mutwo-org/mutwo.ext-mbrola",
+    url="https://github.com/mutwo-org/mutwo.mbrola",
     project_urls={"Documentation": "https://mutwo.readthedocs.io/en/latest/"},
     packages=[
         package
